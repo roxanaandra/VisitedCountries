@@ -1,8 +1,70 @@
 .country-flag {
-  width: 30px;
+  width: 22px;
+  margin: 0 6px;
 }
-
+label {
+  font-size: 16px;
+  font-weight: 500;
+}
 ul {
   list-style-type: none;
   padding: 0;
+}
+li {
+  padding-bottom: 15px;
+}
+nav li {
+  padding-bottom: 0;
+  margin-right: 30px;
+}
+main {
+  padding: 20px;
+  background-color: #1f2937;
+  color: white;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+main > div {
+  max-width: 1200px;
+}
+
+.map-placeholder {
+  width: 100%;
+  border-radius: 60px;
+  
+}
+
+.map-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 60px;
+}
+
+.country-list-container {
+  width: 100%;
+  padding-top: 50px;
+}
+
+.country-list-tabs > ul {
+  border-bottom: 6px solid #fff;
+
+}
+
+.country-list-tabs > li {
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.country-list-panel  {
+  padding: 20px;
+  column-count: 3;
+  column-gap: 1rem;
+  color: black;
+  background-color: rgba(255, 255, 255, 0.5);
+
 }

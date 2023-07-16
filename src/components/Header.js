@@ -1,18 +1,22 @@
 import React from 'react';
+import './Header.css';
 import Nav from './Nav';
-
-const styles = {
-    color: 'blue',
-}
 
 const Header = () => {
     return (
-        <header className="container" style={styles}>
-            <img src="#" alt="Logo"/>
-            <Nav/>
+        <header>
+            <div>
+                <div className="logo">LOGO</div>
+                <Nav/>
+            </div>
         </header>
     )
-
 }
 
 export default Header;
+
+
+
+
+
+

@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Country from './Country';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 const countriesByContinent = [
   {
@@ -98,6 +100,7 @@ const countriesByContinent = [
     { name: 'Saudi Arabia', code: 'sa' },
     { name: 'Singapore', code: 'sg' },
     { name: 'South Korea', code: 'kr' },
+    { name: 'North Korea', code: 'kp' },
     { name: 'Sri Lanka', code: 'lk' },
     { name: 'Syria', code: 'sy' },
     { name: 'Taiwan', code: 'tw' },
@@ -109,6 +112,57 @@ const countriesByContinent = [
     { name: 'Uzbekistan', code: 'uz' },
     { name: 'Vietnam', code: 'vn' },
     { name: 'Yemen', code: 'ye' }
+  ]
+},
+{
+  continent: 'Europe',
+  countries: [
+    { name: 'Albania', code: 'al' },
+    { name: 'Andorra', code: 'ad' },
+    { name: 'Austria', code: 'at' },
+    { name: 'Belarus', code: 'by' },
+    { name: 'Belgium', code: 'be' },
+    { name: 'Bosnia and Herzegovina', code: 'ba' },
+    { name: 'Bulgaria', code: 'bg' },
+    { name: 'Croatia', code: 'hr' },
+    { name: 'Cyprus', code: 'cy' },
+    { name: 'Czech Republic', code: 'cz' },
+    { name: 'Denmark', code: 'dk' },
+    { name: 'Estonia', code: 'ee' },
+    { name: 'Finland', code: 'fi' },
+    { name: 'France', code: 'fr' },
+    { name: 'Germany', code: 'de' },
+    { name: 'Greece', code: 'gr' },
+    { name: 'Hungary', code: 'hu' },
+    { name: 'Iceland', code: 'is' },
+    { name: 'Ireland', code: 'ie' },
+    { name: 'Italy', code: 'it' },
+    { name: 'Kosovo', code: 'xk' },
+    { name: 'Latvia', code: 'lv' },
+    { name: 'Liechtenstein', code: 'li' },
+    { name: 'Lithuania', code: 'lt' },
+    { name: 'Luxembourg', code: 'lu' },
+    { name: 'Malta', code: 'mt' },
+    { name: 'Moldova', code: 'md' },
+    { name: 'Monaco', code: 'mc' },
+    { name: 'Montenegro', code: 'me' },
+    { name: 'Netherlands', code: 'nl' },
+    { name: 'North Macedonia', code: 'mk' },
+    { name: 'Norway', code: 'no' },
+    { name: 'Poland', code: 'pl' },
+    { name: 'Portugal', code: 'pt' },
+    { name: 'Romania', code: 'ro' },
+    { name: 'Russia', code: 'ru' },
+    { name: 'San Marino', code: 'sm' },
+    { name: 'Serbia', code: 'rs' },
+    { name: 'Slovakia', code: 'sk' },
+    { name: 'Slovenia', code: 'si' },
+    { name: 'Spain', code: 'es' },
+    { name: 'Sweden', code: 'se' },
+    { name: 'Switzerland', code: 'ch' },
+    { name: 'Ukraine', code: 'ua' },
+    { name: 'United Kingdom', code: 'gb' },
+    { name: 'Vatican City', code: 'va' }
   ]
 },
   {
@@ -140,6 +194,23 @@ const countriesByContinent = [
   ]
 },
   {
+  continent: 'South America',
+  countries: [
+    { name: 'Argentina', code: 'ar' },
+    { name: 'Bolivia', code: 'bo' },
+    { name: 'Brazil', code: 'br' },
+    { name: 'Chile', code: 'cl' },
+    { name: 'Colombia', code: 'co' },
+    { name: 'Ecuador', code: 'ec' },
+    { name: 'Guyana', code: 'gy' },
+    { name: 'Paraguay', code: 'py' },
+    { name: 'Peru', code: 'pe' },
+    { name: 'Suriname', code: 'sr' },
+    { name: 'Uruguay', code: 'uy' },
+    { name: 'Venezuela', code: 've' }
+  ]
+},
+{
   continent: 'Oceania',
   countries: [
     { name: 'Australia', code: 'au' },
@@ -157,50 +228,58 @@ const countriesByContinent = [
     { name: 'Tuvalu', code: 'tv' },
     { name: 'Vanuatu', code: 'vu' }
   ]
-},
-  {
-  continent: 'South America',
-  countries: [
-    { name: 'Argentina', code: 'ar' },
-    { name: 'Bolivia', code: 'bo' },
-    { name: 'Brazil', code: 'br' },
-    { name: 'Chile', code: 'cl' },
-    { name: 'Colombia', code: 'co' },
-    { name: 'Ecuador', code: 'ec' },
-    { name: 'Guyana', code: 'gy' },
-    { name: 'Paraguay', code: 'py' },
-    { name: 'Peru', code: 'pe' },
-    { name: 'Suriname', code: 'sr' },
-    { name: 'Uruguay', code: 'uy' },
-    { name: 'Venezuela', code: 've' }
-  ]
 }
 ];
 
-const CountryList = ({onCountrySelect}) => {
-    return (
-      <div>
-        {countriesByContinent.map((continent) => (
-          <div>
-          <h2>{continent.continent}</h2>
-          <ul>
-            <div>
-            {continent.countries.map((country) => (
-              <div>
-                <Country
-                key={country.name}
-                country={country.name}
-                flag={country.code}
-                onSelect={onCountrySelect}
-                />
-              </div>
+
+const CountryList = ({ selectedCountries, onCountrySelect }) => {
+  const [activeTab, setActiveTab] = useState(0);
+  const [selectedCounts, setSelectedCounts] = useState([]);
+
+  useEffect(() => {
+    const counts = countriesByContinent.map((continent) => {
+      const continentSelectedCountries = continent.countries.filter((country) =>
+       selectedCountries.includes(country.name)
+      );
+      return continentSelectedCountries.length;
+    });
+    setSelectedCounts(counts);
+  }, [selectedCountries]);
+
+  const handleTabSelect = (index) => {
+    setActiveTab(index);
+  };
+
+  return (
+    <div className='country-list-container'>
+      <Tabs selectedIndex={activeTab} onSelect={handleTabSelect}>
+        <div className='country-list-tabs'>
+          <TabList>
+            {countriesByContinent.map((continent, index) => (
+              <Tab key={continent.continent}>
+                {continent.continent} ({selectedCounts[index]})
+              </Tab>
             ))}
-          </div>
-          </ul>
-          </div>
+          </TabList>
+        </div>
+
+        {countriesByContinent.map((continent) => (
+          <TabPanel key={continent.continent}>
+            <ul className='country-list-panel'>
+              {continent.countries.map((country) => (
+                <Country
+                  key={country.name}
+                  country={country.name}
+                  flag={country.code}
+                  onSelect={onCountrySelect}
+                />
+              ))}
+            </ul>
+          </TabPanel>
         ))}
-      </div>  
-    )
-}
+      </Tabs>
+    </div>
+  );
+};
 
 export default CountryList;
