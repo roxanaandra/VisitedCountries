@@ -16,7 +16,7 @@ const Main = () => {
     return (
         <main>
             <Map selectedCountries={selectedCountries} />
-            <CountryList 
+            <CountryList
                 selectedCountries={selectedCountries}
                 onCountrySelect={handleCountrySelect}
             />
